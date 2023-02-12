@@ -25,11 +25,11 @@ def extracting_the_dataset(df):
     :return: оновлена таблиця
     """
 
-    df["Ex Names"] = df["Street"].str.extract("\((.*)\)")
-    df["Ex Names"] = df["Ex Names"].str.replace("бывш.", "")
-    df["Ex Names"].fillna("-", inplace=True)
+    df["Past Names"] = df["Street"].str.extract("\((.*)\)")
+    df["Past Names"] = df["Ex Names"].str.replace("бывш.", "")
+    df["Past Names"].fillna("-", inplace=True)
     df["Street"] = df["Street"].str.replace("\(бывш\..*\)", "")
-    return d)
+    return df
 
 if __name__ == "__main__":
     print(extracting_the_dataset(convert_file_data_to_dataframe("kharkov_street.txt")))
