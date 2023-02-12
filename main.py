@@ -29,7 +29,7 @@ def extracting_the_dataset(df):
     df["Ex Names"] = df["Ex Names"].str.replace("бывш.", "")
     df["Ex Names"].fillna("-", inplace=True)
     df["Street"] = df["Street"].str.replace("\(бывш\..*\)", "")
-    print(df)
+    return d)
 
 if __name__ == "__main__":
     print(extracting_the_dataset(convert_file_data_to_dataframe("kharkov_street.txt")))
