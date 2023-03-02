@@ -38,32 +38,35 @@ df = pd.DataFrame(data)
 mask = df.apply(lambda row: 'Unknown' in row.values, axis=1)
 
 df = df[~mask]
-conn = sqlite3.connect('identifier.sqlite')
-c = conn.cursor()
-conn = sqlite3.connect('database.db')
+mask = df['Area'].str.contains('район')
+
+df = df[mask]
+
+conn = sqlite3.connect('identifier.sqlite [2]')
 c = conn.cursor()
 try:
-    c.execute('''CREATE TABLE users2 (id INTEGER PRIMARY KEY, Name TEXT, 
-              Last_Name TEXT, 
-              Street TEXT, 
-              Building_Number TEXT, 
-              Area TEXT, 
+    c.execute('''CREATE TABLE users2 (id INTEGER PRIMARY KEY, Name TEXT,
+              Last_Name TEXT,
+              Street TEXT,
+              Building_Number TEXT,
+              Area TEXT,
               Time DATETIME)''')
 except sqlite3.OperationalError:
     pass
+
 
 def find_area(building_number, street_name, df):
     area = df.loc[(df['Street'] == street_name) & (df['Number of Building'] == building_number), 'Area']
     return area
 
 
-def insert_data(name, last_name, building_number, street_name, df):
+def insert_data(name, last_name, building_number, street_name, new_column, df):
     time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     area = find_area(building_number, street_name, df)
     unique_id = str(datetime.datetime.now().timestamp()).replace('.', '')[:8]
-    c.execute("INSERT INTO users2 VALUES (?, ?, ?, ?, ?, ?, ?)",
-              (unique_id, name, last_name, street_name, building_number, str(area), time))
+    c.execute("INSERT INTO users2 VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+              (unique_id, name, last_name, street_name, building_number, str(area), time, new_column))
     conn.commit()
 
 
-insert_data('Misha', 'Dik', 'Білогорща вулиця', '98а', df)
+insert_data('Dima', 'masha', '2', 'Тараса Шевченка проспект', 'ABC12345', df)
